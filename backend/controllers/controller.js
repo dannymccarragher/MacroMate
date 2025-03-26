@@ -1,1 +1,9 @@
-import sequelize from "../db/db";
+
+const renderHome = (req, res) => {
+    res.render('home');
+}
+
+
+export default {
+    renderHome
+}

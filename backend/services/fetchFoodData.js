@@ -9,21 +9,20 @@ dotenv.config({
 const fetchData = async(foodName) => {
     try {
         const API_KEY = process.env.API_KEY;
-        const URI = "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=" + API_KEY;
-
+        const URI = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(foodName)}&api_key=${API_KEY}`;
+        
         const config = {
             method: "GET",
             mode: "cors"
         }
 
-        const response = await fetch(URI, config );
+        const response = await fetch(URI, config);
 
         const data = await response.json();
-        console.log("Stored foods: ", data)
+        console.log("Matching foods: ", data)
     } catch(error){
         console.error("Error: " , error);
     }
 }
 
-fetchData();
 export default fetchData;
