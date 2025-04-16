@@ -3,6 +3,8 @@ import controller from "../controllers/controller.js";
 
 const router = express.Router();
 
-router.get('/', controller.renderHome);
+// router.get('/home', controller.renderHome);
+router.get('/search', controller.fetchData);
+router.get('/suggest', controller.suggestFoods);
 
 export default router;
