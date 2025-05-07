@@ -1,22 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NutritionTotals from "./NutritionTotals";
+import FoodDetails from "./FoodDetails";
 
 const NutritionSearch = () => {
     const [food, setFood] = useState("");
     const [weight, setWeight] = useState(100);
     const [nutrition, setNutrition] = useState(null);
     const [error, setError] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+    const [selected, setSelected] = useState(false);
+    const [diary, setDiary] = useState([]); // 🆕 Track added foods
 
-    const handleSearch = async () => {
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            if (food.length < 2) {
+                setSuggestions([]);
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/suggest?query=${food}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setSuggestions(data);
+                }
+            } catch {
+                setSuggestions([]);
+            }
+        };
+
+        fetchSuggestions();
+    }, [food]);
+
+    const handleSearch = async (selectedFood = food) => {
         try {
-            const url = `http://localhost:3000/search?food=${food}&weight=${weight}`;
-
-            const config = {
-                method: 'GET',
-                mode: 'cors'
-            };
-
-            const response = await fetch(url, config);
+            const url = `http://localhost:3000/search?food=${selectedFood}&weight=${weight}`;
+            const response = await fetch(url);
 
             if (!response.ok) {
                 throw new Error("No data found or API error.");
@@ -25,11 +44,50 @@ const NutritionSearch = () => {
             const data = await response.json();
             setNutrition(data);
             setError("");
+            setSuggestions([]);
+            setSelected(true);
         } catch (err) {
             setError(err.message);
             setNutrition(null);
         }
     };
+
+    const handleSuggestionClick = (suggestedFood) => {
+        setFood(suggestedFood);
+        handleSearch(suggestedFood);
+    };
+
+    const handleBack = () => {
+        setSelected(false);
+        setNutrition(null);
+        setFood("");
+        setSuggestions([]);
+    };
+
+    const handleAddFood = (foodData) => {
+        setDiary(prev => [...prev, foodData]); // 🆕 Add to diary
+        handleBack();
+    };
+
+    const calculateTotals = () => {
+        return diary.reduce((totals, item) => {
+            totals.calories += item.nutrients.calories || 0;
+            totals.carbohydrates += item.nutrients.carbohydrates || 0;
+            totals.protein += item.nutrients.protein || 0;
+            totals.fats += item.nutrients.fats || 0;
+            return totals;
+        }, { calories: 0, carbohydrates: 0, protein: 0, fats: 0 });
+    };
+
+    if (selected && nutrition) {
+        return (
+            <FoodDetails
+                nutrition={nutrition}
+                onBack={handleBack}
+                onAdd={handleAddFood}
+            />
+        );
+    }
 
     return (
         <div>
@@ -40,49 +98,26 @@ const NutritionSearch = () => {
                     value={food}
                     onChange={(e) => setFood(e.target.value)}
                 />
-                <div>
-                    <input
-                        type="number"
-                        value={weight}
-                        onChange={(e) => setWeight(e.target.value)}
-                    />
-                    <span>g</span>
-                </div>
-                <button onClick={handleSearch}>
-                    Search
-                </button>
+                <button onClick={() => handleSearch()}>Search</button>
             </div>
 
+            {suggestions.length > 0 && (
+                <ul>
+                    {suggestions.map((item, index) => (
+                        <li key={index} onClick={() => handleSuggestionClick(item)}>
+                            {item}
+                        </li>
+                    ))}
+                </ul>
+            )}
+
             {error && <p>{error}</p>}
-            {nutrition && (
-                <>
-                    <div>
-                        <h3>{nutrition.food}</h3>
-                        <div>
-                            <div>
-                                <span>Weight</span>
-                                <span>{nutrition.weight}g</span>
-                            </div>
-                            <div>
-                                <span>Calories</span>
-                                <span>{nutrition.nutrients.calories}kcal</span>
-                            </div>
-                            <div>
-                                <span>Carbs</span>
-                                <span>{nutrition.nutrients.carbohydrates}g</span>
-                            </div>
-                            <div>
-                                <span>Protein</span>
-                                <span>{nutrition.nutrients.protein}g</span>
-                            </div>
-                            <div>
-                                <span>Fats</span>
-                                <span>{nutrition.nutrients.fats}g</span>
-                            </div>
-                        </div>
-                    </div>
-                    <NutritionTotals nutritionData={nutrition} />
-                </>
+
+            {diary.length > 0 && (
+                <div style={{ marginTop: "20px" }}>
+                    <h3>Today's Totals</h3>
+                    <NutritionTotals nutritionData={calculateTotals()} />
+                </div>
             )}
         </div>
     );
