@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import NutritionTotals from "./NutritionTotals";
 import FoodDetails from "./FoodDetails";
+import NutritionLog from "./NutritionLog";
 
 const NutritionSearch = () => {
     const [food, setFood] = useState("");
@@ -9,7 +10,7 @@ const NutritionSearch = () => {
     const [error, setError] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [selected, setSelected] = useState(false);
-    const [diary, setDiary] = useState([]); // 🆕 Track added foods
+    const [diary, setDiary] = useState([]); 
 
     useEffect(() => {
         const fetchSuggestions = async () => {
@@ -117,6 +118,7 @@ const NutritionSearch = () => {
                 <div style={{ marginTop: "20px" }}>
                     <h3>Today's Totals</h3>
                     <NutritionTotals nutritionData={calculateTotals()} />
+                    <NutritionLog entries={diary} />
                 </div>
             )}
         </div>
