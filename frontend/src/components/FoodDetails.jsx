@@ -53,10 +53,10 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                 <p>Loading updated nutrition...</p>
             ) : (
                 <div>
-                    <p><strong>Calories:</strong> {foodData.nutrients.calories} kcal</p>
-                    <p><strong>Carbs:</strong> {foodData.nutrients.carbohydrates} g</p>
-                    <p><strong>Protein:</strong> {foodData.nutrients.protein} g</p>
-                    <p><strong>Fats:</strong> {foodData.nutrients.fats} g</p>
+                    <p><strong>Calories:</strong> {Math.round(foodData.nutrients.calories)} kcal</p>
+                    <p><strong>Carbs:</strong> {Math.round(foodData.nutrients.carbohydrates)} g</p>
+                    <p><strong>Protein:</strong> {Math.round(foodData.nutrients.protein)} g</p>
+                    <p><strong>Fats:</strong> {Math.round(foodData.nutrients.fats)} g</p>
                 </div>
             )}
 
