@@ -66,20 +66,28 @@ const NutritionSearch = () => {
     };
 
     const handleAddFood = (foodData) => {
-        setDiary(prev => [...prev, foodData]); // 🆕 Add to diary
+        setDiary(prev => [...prev, foodData]); 
         handleBack();
     };
 
     const calculateTotals = () => {
-        return diary.reduce((totals, item) => {
+        const totals = diary.reduce((totals, item) => {
             totals.calories += item.nutrients.calories || 0;
             totals.carbohydrates += item.nutrients.carbohydrates || 0;
             totals.protein += item.nutrients.protein || 0;
             totals.fats += item.nutrients.fats || 0;
             return totals;
         }, { calories: 0, carbohydrates: 0, protein: 0, fats: 0 });
+    
+        return {
+            calories: Math.round(totals.calories * 10) / 10,
+            carbohydrates: Math.round(totals.carbohydrates * 10) / 10,
+            protein: Math.round(totals.protein * 10) / 10,
+            fats: Math.round(totals.fats * 10) / 10
+        };
     };
 
+    
     if (selected && nutrition) {
         return (
             <FoodDetails
