@@ -53,6 +53,13 @@ const NutritionSearch = () => {
         }
     };
 
+    const handleDelete = (indexToDelete) => {
+        if (indexToDelete >= 0 && indexToDelete < diary.length) {
+            const updatedDiary = diary.filter((_, i) => i !== indexToDelete);
+            setDiary(updatedDiary);
+        }
+    };
+
     const handleSuggestionClick = (suggestedFood) => {
         setFood(suggestedFood);
         handleSearch(suggestedFood);
@@ -71,23 +78,16 @@ const NutritionSearch = () => {
     };
 
     const calculateTotals = () => {
-        const totals = diary.reduce((totals, item) => {
+        return diary.reduce((totals, item) => {
             totals.calories += item.nutrients.calories || 0;
             totals.carbohydrates += item.nutrients.carbohydrates || 0;
             totals.protein += item.nutrients.protein || 0;
             totals.fats += item.nutrients.fats || 0;
             return totals;
         }, { calories: 0, carbohydrates: 0, protein: 0, fats: 0 });
-    
-        return {
-            calories: Math.round(totals.calories * 10) / 10,
-            carbohydrates: Math.round(totals.carbohydrates * 10) / 10,
-            protein: Math.round(totals.protein * 10) / 10,
-            fats: Math.round(totals.fats * 10) / 10
-        };
     };
-
     
+
     if (selected && nutrition) {
         return (
             <FoodDetails
@@ -126,7 +126,7 @@ const NutritionSearch = () => {
                 <div style={{ marginTop: "20px" }}>
                     <h3>Today's Totals</h3>
                     <NutritionTotals nutritionData={calculateTotals()} />
-                    <NutritionLog entries={diary} />
+                    <NutritionLog entries={diary} onDelete={handleDelete}/>
                 </div>
             )}
         </div>
