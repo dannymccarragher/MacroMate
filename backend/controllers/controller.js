@@ -10,8 +10,8 @@ const fetchData = async (req, res) => {
             return res.status(400).json({ error: "Food name is required" });
         }
 
-        
-        const weight = parseFloat(req.query.weight) || 100; 
+
+        const weight = parseFloat(req.query.weight) || 100;
 
         const URI = `http://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(foodName)}&api_key=${API_KEY}`;
 
@@ -23,6 +23,7 @@ const fetchData = async (req, res) => {
 
         const data = await response.json();
 
+
         if (!data.foods || data.foods.length === 0) {
             return res.status(404).json({ error: "No matching food found" });
         }
@@ -30,13 +31,14 @@ const fetchData = async (req, res) => {
         const foodItem = data.foods[0];
 
         const nutrients = {};
-        
+
+        const servingSize = foodItem.servingSize;
         // Extract nutrients data and scale based on weight
         foodItem.foodNutrients.forEach(nutrient => {
-            let nutrientValue = nutrient.value; // Corrected reference
+            let nutrientValue = nutrient.value;
 
             if (nutrientValue) {
-                nutrientValue = (nutrientValue * weight) / 100; // Scale nutrients based on weight
+                nutrientValue = (nutrientValue * weight) / 100;
             }
 
             if (nutrient.nutrientName.includes("Energy")) {
@@ -50,11 +52,12 @@ const fetchData = async (req, res) => {
             }
         });
 
-        res.json({
-            food: foodItem.description,
-            weight: weight,
-            nutrients: nutrients
-        });
+            res.json({
+                food: foodItem.description,
+                weight: weight,
+                nutrients: nutrients,
+                servingSize
+            });
 
     } catch (error) {
         console.error("Error: ", error);
