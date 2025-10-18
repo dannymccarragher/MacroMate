@@ -89,7 +89,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                                 }
                             }}
                         >
-                            <option value="custom">Custom Weight</option>
+                            <option value="custom">Grams</option>
                             <option value="standard">Standard Serving ({foodData.servingSize}g)</option>
                             {foodData.servingSizeOptions && foodData.servingSizeOptions.map((option, index) => (
                                 <option key={index} value={`option-${index}`}>

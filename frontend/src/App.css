@@ -69,10 +69,21 @@
   font-size: var(--font-sm);
 }
 
-.nutrition-icon.calories { background: var(--calories); }
-.nutrition-icon.carbs { background: var(--carbs); }
-.nutrition-icon.protein { background: var(--protein); }
-.nutrition-icon.fats { background: var(--fats); }
+.nutrition-icon.calories {
+  background: var(--calories);
+}
+
+.nutrition-icon.carbs {
+  background: var(--carbs);
+}
+
+.nutrition-icon.protein {
+  background: var(--protein);
+}
+
+.nutrition-icon.fats {
+  background: var(--fats);
+}
 
 .nutrition-value {
   flex: 1;
@@ -183,7 +194,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Error states */
@@ -218,4 +231,116 @@
 
 .empty-state-description {
   font-size: var(--font-sm);
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-4);
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--secondary-light);
+  background: var(--secondary-light);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: var(--font-xl);
+  font-weight: 600;
+  color: var(--secondary-dark);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: var(--font-lg);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius);
+  transition: background-color var(--transition);
+  color: var(--secondary);
+}
+
+.modal-close:hover {
+  background: var(--secondary-border);
+}
+
+.modal-body {
+  padding: var(--space-6);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-search-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+}
+
+.modal-search-input {
+  font-size: var(--font-lg);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+}
+
+.modal-suggestions {
+  flex: 1;
+  background: white;
+  border: 1px solid var(--secondary-border);
+  border-radius: var(--radius-lg);
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.modal-suggestion-item {
+  padding: var(--space-4);
+  cursor: pointer;
+  border-bottom: 1px solid var(--secondary-light);
+  transition: background-color var(--transition);
+  font-size: var(--font-base);
+}
+
+.modal-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.modal-suggestion-item:hover {
+  background: var(--primary-light);
+}
+
+/* Search icon in input */
+.search-icon {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary);
+  pointer-events: none;
 }
