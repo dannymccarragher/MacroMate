@@ -5,9 +5,9 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
     const [foodData, setFoodData] = useState(nutrition);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [inputType, setInputType] = useState('custom');
+    const [servingCount, setServingCount] = useState('');
     
-
-    console.log("Initial nutrition prop:", nutrition);
 
     useEffect(() => {
         const fetchUpdatedNutrition = async () => {
@@ -29,7 +29,20 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
         };
 
         fetchUpdatedNutrition();
-    }, [weight]);
+    }, [foodData.food, weight]);
+
+    // Update weight when serving size option is selected
+    useEffect(() => {
+        if (inputType === 'standard' && foodData.servingSize && servingCount > 0) {
+            setWeight(foodData.servingSize * servingCount);
+        } else if (inputType.startsWith('option-') && foodData.servingSizeOptions) {
+            const optionIndex = parseInt(inputType.split('-')[1]);
+            const selectedOption = foodData.servingSizeOptions[optionIndex];
+            if (selectedOption) {
+                setWeight(selectedOption.value);
+            }
+        }
+    }, [inputType, foodData.servingSizeOptions, foodData.servingSize, servingCount]);
 
     const handleAdd = () => {
         onAdd({ ...foodData, weight });
@@ -62,14 +75,73 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
 
             <div className="card-body">
                 <div className="form-group">
-                    <label className="form-label">Weight (grams)</label>
-                    <input
-                        type="number"
-                        className="form-input"
-                        value={weight}
-                        onChange={(e) => setWeight(parseFloat(e.target.value))}
-                        placeholder="Enter weight in grams"
-                    />
+                    <label className="form-label">Serving Size</label>
+                    <div className="flex gap-2 mb-3">
+                        <select
+                            className="form-input flex-1"
+                            value={inputType}
+                            onChange={(e) => {
+                                setInputType(e.target.value);
+                                if (e.target.value === 'standard' && foodData.servingSize && servingCount && servingCount > 0) {
+                                    setWeight(foodData.servingSize * servingCount);
+                                } else if (e.target.value === 'standard' && foodData.servingSize) {
+                                    setWeight(foodData.servingSize);
+                                }
+                            }}
+                        >
+                            <option value="custom">Custom Weight</option>
+                            <option value="standard">Standard Serving ({foodData.servingSize}g)</option>
+                            {foodData.servingSizeOptions && foodData.servingSizeOptions.map((option, index) => (
+                                <option key={index} value={`option-${index}`}>
+                                    {option.label} ({option.value}g)
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    {inputType === 'custom' && (
+                        <input
+                            type="number"
+                            className="form-input"
+                            value={weight}
+                            onChange={(e) => setWeight(parseFloat(e.target.value))}
+                            placeholder="Enter weight in grams"
+                        />
+                    )}
+                    
+                    {inputType === 'standard' && (
+                        <div className="flex gap-2 items-center">
+                            <input
+                                type="number"
+                                className="form-input flex-1"
+                                value={servingCount || ''}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === '') {
+                                        setServingCount('');
+                                    } else {
+                                        const numValue = parseFloat(value);
+                                        if (!isNaN(numValue) && numValue >= 0) {
+                                            setServingCount(numValue);
+                                        }
+                                    }
+                                }}
+                                min="0"
+                                step="0.1"
+                                placeholder="Number of servings"
+                            />
+                            <span className="text-sm text-secondary">
+                                {servingCount && servingCount > 0 ? `= ${Math.round(foodData.servingSize * servingCount)}g total` : 'Enter serving count'}
+                            </span>
+                        </div>
+                    )}
+                    
+                    {inputType.startsWith('option-') && (
+                        <div className="text-sm text-secondary">
+                            Selected: {foodData.servingSizeOptions[parseInt(inputType.split('-')[1])]?.label} 
+                            ({foodData.servingSizeOptions[parseInt(inputType.split('-')[1])]?.value}g)
+                        </div>
+                    )}
                 </div>
 
                 {loading ? (

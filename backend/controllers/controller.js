@@ -36,6 +36,14 @@ const fetchData = async (req, res) => {
         const nutrients = {};
 
         const servingSize = foodItem.servingSize;
+        
+        // Extract serving size options from foodMeasures
+        const servingSizeOptions = foodItem.foodMeasures ? foodItem.foodMeasures.map(measure => ({
+            label: measure.householdServingFullText || measure.disseminationText,
+            value: measure.gramWeight,
+            unit: measure.measureUnitAbbreviation || 'g'
+        })) : [];
+        
         // Extract nutrients data and scale based on weight
         foodItem.foodNutrients.forEach(nutrient => {
             let nutrientValue = nutrient.value;
@@ -59,7 +67,8 @@ const fetchData = async (req, res) => {
                 food: foodItem.description,
                 weight: weight,
                 nutrients: nutrients,
-                servingSize
+                servingSize,
+                servingSizeOptions
             });
 
     } catch (error) {
