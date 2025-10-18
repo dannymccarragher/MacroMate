@@ -5,8 +5,10 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
     const [foodData, setFoodData] = useState(nutrition);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    
 
-    // Auto-refresh nutrients when weight changes
+    console.log("Initial nutrition prop:", nutrition);
+
     useEffect(() => {
         const fetchUpdatedNutrition = async () => {
             if (!foodData.food || isNaN(weight)) return;
@@ -32,6 +34,20 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
     const handleAdd = () => {
         onAdd({ ...foodData, weight });
     };
+
+    let nutritionDisplay = null;
+    if (loading) {
+        nutritionDisplay = <p>Loading updated nutrition...</p>;
+    } else {
+        nutritionDisplay = (
+            <div>
+                <p><strong>Calories:</strong> {Math.round(foodData.nutrients.calories)} kcal</p>
+                <p><strong>Carbs:</strong> {Math.round(foodData.nutrients.carbohydrates)} g</p>
+                <p><strong>Protein:</strong> {Math.round(foodData.nutrients.protein)} g</p>
+                <p><strong>Fats:</strong> {Math.round(foodData.nutrients.fats)} g</p>
+            </div>
+        );
+    }
 
     return (
         <div className="card">

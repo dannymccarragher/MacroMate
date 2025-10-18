@@ -29,6 +29,7 @@ const fetchData = async (req, res) => {
         }
 
         const foodItem = data.foods[0];
+        console.log("Serving Size:", foodItem.servingSize); 
 
         const nutrients = {};
 
