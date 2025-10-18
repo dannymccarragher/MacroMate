@@ -1,32 +1,22 @@
-import { Link } from 'react-router-dom';
 
 function Header() {
     return (
-        <header>
-            <div>
-                <div>
+        <header className="app-header">
+            <div className="container">
+                <div className="flex items-center justify-between p-4">
                     {/* Logo and App Title */}
-                    <div>
-                        
-                        <h1>MacroMate</h1>
+                    <div className="flex items-center gap-4">
+                        <div className="nutrition-icon calories">
+                            🍎
+                        </div>
+                        <h1 className="text-primary">MacroMate</h1>
                     </div>
 
                     {/* Navigation Links */}
-                    <nav>
-                        <ul>
-                            <li>
-                                <Link to="/">Home</Link>
-                            </li>
-                            <li>
-                                <Link to="/search">Search</Link>
-                            </li>
-                            <li>
-                                <Link to="/about">About</Link>
-                            </li>
-                            <li>
-                                <button>Sign In</button>
-                            </li>
-                        </ul>
+                    <nav className="flex items-center gap-6">
+                        <a href="#" className="text-secondary hover:text-primary transition-colors">Dashboard</a>
+                        <a href="#" className="text-secondary hover:text-primary transition-colors">History</a>
+                        <a href="#" className="text-secondary hover:text-primary transition-colors">Settings</a>
                     </nav>
                 </div>
             </div>

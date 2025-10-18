@@ -99,34 +99,90 @@ const NutritionSearch = () => {
     }
 
     return (
-        <div>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Enter food name"
-                    value={food}
-                    onChange={(e) => setFood(e.target.value)}
-                />
-                <button onClick={() => handleSearch()}>Search</button>
+        <div className="grid gap-6">
+            {/* Search Section */}
+            <div className="card">
+                <div className="card-header">
+                    <h3>Search for Food</h3>
+                    <p className="text-secondary">Find nutritional information for any food item</p>
+                </div>
+                <div className="card-body">
+                    <div className="form-group">
+                        <label className="form-label">Food Name</label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                className="form-input"
+                                placeholder="Enter food name (e.g., apple, chicken breast)"
+                                value={food}
+                                onChange={(e) => setFood(e.target.value)}
+                            />
+                            {suggestions.length > 0 && (
+                                <ul className="suggestions-list">
+                                    {suggestions.map((item, index) => (
+                                        <li key={index} className="suggestion-item" onClick={() => handleSuggestionClick(item)}>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <div className="form-group">
+                        <label className="form-label">Weight (grams)</label>
+                        <input
+                            type="number"
+                            className="form-input"
+                            placeholder="100"
+                            value={weight}
+                            onChange={(e) => setWeight(parseFloat(e.target.value) || 100)}
+                        />
+                    </div>
+
+                    <button className="btn btn-primary btn-lg" onClick={() => handleSearch()}>
+                        🔍 Search Food
+                    </button>
+
+                    {error && <div className="error-message">{error}</div>}
+                </div>
             </div>
 
-            {suggestions.length > 0 && (
-                <ul>
-                    {suggestions.map((item, index) => (
-                        <li key={index} onClick={() => handleSuggestionClick(item)}>
-                            {item}
-                        </li>
-                    ))}
-                </ul>
+            {/* Daily Totals and Log */}
+            {diary.length > 0 && (
+                <div className="grid gap-6">
+                    <div className="card">
+                        <div className="card-header">
+                            <h3>Today's Nutrition Summary</h3>
+                            <p className="text-secondary">Your daily macronutrient totals</p>
+                        </div>
+                        <div className="card-body">
+                            <NutritionTotals nutritionData={calculateTotals()} />
+                        </div>
+                    </div>
+                    
+                    <div className="card">
+                        <div className="card-header">
+                            <h3>Food Log</h3>
+                            <p className="text-secondary">Track your meals and snacks</p>
+                        </div>
+                        <div className="card-body">
+                            <NutritionLog entries={diary} onDelete={handleDelete}/>
+                        </div>
+                    </div>
+                </div>
             )}
 
-            {error && <p>{error}</p>}
-
-            {diary.length > 0 && (
-                <div style={{ marginTop: "20px" }}>
-                    <h3>Today's Totals</h3>
-                    <NutritionTotals nutritionData={calculateTotals()} />
-                    <NutritionLog entries={diary} onDelete={handleDelete}/>
+            {/* Empty State */}
+            {diary.length === 0 && !selected && (
+                <div className="card">
+                    <div className="empty-state">
+                        <div className="empty-state-icon">🍽️</div>
+                        <h3 className="empty-state-title">Start Your Nutrition Journey</h3>
+                        <p className="empty-state-description">
+                            Search for foods above to begin tracking your daily nutrition intake.
+                        </p>
+                    </div>
                 </div>
             )}
         </div>

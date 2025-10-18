@@ -34,37 +34,97 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
     };
 
     return (
-        <div>
-            <button onClick={onBack}>← Back to Search</button>
-            <h3>{foodData.food}</h3>
-
-            <label>
-                Weight:
-                <input
-                    type="number"
-                    value={weight}
-                    onChange={(e) => setWeight(parseFloat(e.target.value))}
-                    style={{ marginLeft: "8px" }}
-                />
-                <span> g</span>
-            </label>
-
-            {loading ? (
-                <p>Loading updated nutrition...</p>
-            ) : (
-                <div>
-                    <p><strong>Calories:</strong> {Math.round(foodData.nutrients.calories)} kcal</p>
-                    <p><strong>Carbs:</strong> {Math.round(foodData.nutrients.carbohydrates)} g</p>
-                    <p><strong>Protein:</strong> {Math.round(foodData.nutrients.protein)} g</p>
-                    <p><strong>Fats:</strong> {Math.round(foodData.nutrients.fats)} g</p>
+        <div className="card">
+            <div className="card-header">
+                <div className="flex items-center justify-between">
+                    <h3>{foodData.food}</h3>
+                    <button className="btn btn-secondary" onClick={onBack}>
+                        ← Back to Search
+                    </button>
                 </div>
-            )}
+            </div>
 
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div className="card-body">
+                <div className="form-group">
+                    <label className="form-label">Weight (grams)</label>
+                    <input
+                        type="number"
+                        className="form-input"
+                        value={weight}
+                        onChange={(e) => setWeight(parseFloat(e.target.value))}
+                        placeholder="Enter weight in grams"
+                    />
+                </div>
 
-            <button onClick={handleAdd} style={{ marginTop: "10px" }}>
-                ➕ Add Food
-            </button>
+                {loading ? (
+                    <div className="flex items-center justify-center p-6">
+                        <div className="loading-spinner"></div>
+                        <span className="ml-3 text-secondary">Loading updated nutrition...</span>
+                    </div>
+                ) : (
+                    <div className="nutrition-card">
+                        <div className="card-header">
+                            <h4>Nutritional Information</h4>
+                            <p className="text-secondary">Per {weight}g serving</p>
+                        </div>
+                        <div className="card-body">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="nutrition-metric">
+                                    <div className="nutrition-icon calories">C</div>
+                                    <div className="nutrition-value">
+                                        <div className="nutrition-label">Calories</div>
+                                        <div className="nutrition-amount">
+                                            {Math.round(foodData.nutrients.calories)}
+                                            <span className="nutrition-unit">kcal</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="nutrition-metric">
+                                    <div className="nutrition-icon carbs">C</div>
+                                    <div className="nutrition-value">
+                                        <div className="nutrition-label">Carbohydrates</div>
+                                        <div className="nutrition-amount">
+                                            {Math.round(foodData.nutrients.carbohydrates)}
+                                            <span className="nutrition-unit">g</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="nutrition-metric">
+                                    <div className="nutrition-icon protein">P</div>
+                                    <div className="nutrition-value">
+                                        <div className="nutrition-label">Protein</div>
+                                        <div className="nutrition-amount">
+                                            {Math.round(foodData.nutrients.protein)}
+                                            <span className="nutrition-unit">g</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="nutrition-metric">
+                                    <div className="nutrition-icon fats">F</div>
+                                    <div className="nutrition-value">
+                                        <div className="nutrition-label">Fats</div>
+                                        <div className="nutrition-amount">
+                                            {Math.round(foodData.nutrients.fats)}
+                                            <span className="nutrition-unit">g</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {error && <div className="error-message">{error}</div>}
+
+                <div className="flex gap-4 mt-6">
+                    <button className="btn btn-primary btn-lg flex-1" onClick={handleAdd}>
+                        ➕ Add to Food Log
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
