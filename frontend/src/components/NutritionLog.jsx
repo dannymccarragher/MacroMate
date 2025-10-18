@@ -1,10 +1,10 @@
-
+import { ClipboardList, Trash2, Flame, Wheat, Drumstick, Droplet } from "lucide-react";
 
 const NutritionLog = ({ entries, onDelete }) => {
     if (entries.length === 0) {
         return (
             <div className="empty-state">
-                <div className="empty-state-icon">📝</div>
+                <div className="empty-state-icon"><ClipboardList size={32} /></div>
                 <h4 className="empty-state-title">No foods logged yet</h4>
                 <p className="empty-state-description">
                     Start adding foods to see them appear here.
@@ -21,18 +21,18 @@ const NutritionLog = ({ entries, onDelete }) => {
                         <h4 className="food-entry-title">{item.food}</h4>
                         <div className="food-entry-actions">
                             <span className="text-sm text-secondary">{item.weight}g</span>
-                            <button 
-                                className="btn btn-danger btn-sm" 
+                            <button
+                                className="btn btn-danger btn-sm"
                                 onClick={() => onDelete(index)}
                             >
-                                🗑️ Delete
+                                <Trash2 /> Delete
                             </button>
                         </div>
                     </div>
-                    
+
                     <div className="food-entry-nutrition">
                         <div className="nutrition-metric">
-                            <div className="nutrition-icon calories">🔥</div>
+                            <div className="nutrition-icon calories"><Flame /></div>
                             <div className="nutrition-value">
                                 <div className="nutrition-label">Calories</div>
                                 <div className="nutrition-amount">
@@ -43,7 +43,7 @@ const NutritionLog = ({ entries, onDelete }) => {
                         </div>
 
                         <div className="nutrition-metric">
-                            <div className="nutrition-icon carbs">🍞</div>
+                            <div className="nutrition-icon carbs"><Wheat /></div>
                             <div className="nutrition-value">
                                 <div className="nutrition-label">Carbs</div>
                                 <div className="nutrition-amount">
@@ -54,7 +54,7 @@ const NutritionLog = ({ entries, onDelete }) => {
                         </div>
 
                         <div className="nutrition-metric">
-                            <div className="nutrition-icon protein">🥩</div>
+                            <div className="nutrition-icon protein"><Drumstick /></div>
                             <div className="nutrition-value">
                                 <div className="nutrition-label">Protein</div>
                                 <div className="nutrition-amount">
@@ -65,7 +65,7 @@ const NutritionLog = ({ entries, onDelete }) => {
                         </div>
 
                         <div className="nutrition-metric">
-                            <div className="nutrition-icon fats">🥑</div>
+                            <div className="nutrition-icon fats"><Droplet /></div>
                             <div className="nutrition-value">
                                 <div className="nutrition-label">Fats</div>
                                 <div className="nutrition-amount">

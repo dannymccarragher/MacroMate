@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Plus, ArrowLeft, Flame, Wheat, Drumstick, Droplet } from "lucide-react";
 
 const FoodDetails = ({ nutrition, onBack, onAdd }) => {
     const [weight, setWeight] = useState(nutrition.weight);
@@ -7,7 +8,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
     const [error, setError] = useState("");
     const [inputType, setInputType] = useState('custom');
     const [servingCount, setServingCount] = useState('');
-    
+
 
     useEffect(() => {
         const fetchUpdatedNutrition = async () => {
@@ -68,7 +69,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                 <div className="flex items-center justify-between">
                     <h3>{foodData.food}</h3>
                     <button className="btn btn-secondary" onClick={onBack}>
-                        ← Back to Search
+                        <ArrowLeft /> Back to Search
                     </button>
                 </div>
             </div>
@@ -98,7 +99,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                             ))}
                         </select>
                     </div>
-                    
+
                     {inputType === 'custom' && (
                         <input
                             type="number"
@@ -108,7 +109,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                             placeholder="Enter weight in grams"
                         />
                     )}
-                    
+
                     {inputType === 'standard' && (
                         <div className="flex gap-2 items-center">
                             <input
@@ -135,10 +136,10 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                             </span>
                         </div>
                     )}
-                    
+
                     {inputType.startsWith('option-') && (
                         <div className="text-sm text-secondary">
-                            Selected: {foodData.servingSizeOptions[parseInt(inputType.split('-')[1])]?.label} 
+                            Selected: {foodData.servingSizeOptions[parseInt(inputType.split('-')[1])]?.label}
                             ({foodData.servingSizeOptions[parseInt(inputType.split('-')[1])]?.value}g)
                         </div>
                     )}
@@ -158,7 +159,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                         <div className="card-body">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="nutrition-metric">
-                                    <div className="nutrition-icon calories">C</div>
+                                    <div className="nutrition-icon calories"><Flame /></div>
                                     <div className="nutrition-value">
                                         <div className="nutrition-label">Calories</div>
                                         <div className="nutrition-amount">
@@ -169,7 +170,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                                 </div>
 
                                 <div className="nutrition-metric">
-                                    <div className="nutrition-icon carbs">C</div>
+                                    <div className="nutrition-icon carbs"><Wheat /></div>
                                     <div className="nutrition-value">
                                         <div className="nutrition-label">Carbohydrates</div>
                                         <div className="nutrition-amount">
@@ -180,7 +181,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                                 </div>
 
                                 <div className="nutrition-metric">
-                                    <div className="nutrition-icon protein">P</div>
+                                    <div className="nutrition-icon protein"><Drumstick /></div>
                                     <div className="nutrition-value">
                                         <div className="nutrition-label">Protein</div>
                                         <div className="nutrition-amount">
@@ -191,7 +192,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
                                 </div>
 
                                 <div className="nutrition-metric">
-                                    <div className="nutrition-icon fats">F</div>
+                                    <div className="nutrition-icon fats"><Droplet /></div>
                                     <div className="nutrition-value">
                                         <div className="nutrition-label">Fats</div>
                                         <div className="nutrition-amount">
@@ -209,7 +210,7 @@ const FoodDetails = ({ nutrition, onBack, onAdd }) => {
 
                 <div className="flex gap-4 mt-6">
                     <button className="btn btn-primary btn-lg flex-1" onClick={handleAdd}>
-                        ➕ Add to Food Log
+                        <Plus /> Add to Food Log
                     </button>
                 </div>
             </div>
