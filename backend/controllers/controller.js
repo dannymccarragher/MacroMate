@@ -1,9 +1,12 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: '../.env' });
+dotenv.config({path: 'backend/.env'});
 
-const API_KEY = process.env.API_KEY || "PBjPdzUs9NdT1R8bL7KKI5geswFowLTEAK261N0a";
+const API_KEY = process.env.API_KEY;
 
 const fetchData = async (req, res) => {
+    // Set CORS headers explicitly
+    res.header('Access-Control-Allow-Origin', '*');
+    
     try {
         const foodName = req.query.food;
         if (!foodName) {
@@ -29,7 +32,6 @@ const fetchData = async (req, res) => {
         }
 
         const foodItem = data.foods[0];
-        console.log("Serving Size:", foodItem.servingSize); 
 
         const nutrients = {};
 
@@ -67,6 +69,9 @@ const fetchData = async (req, res) => {
 };
 
 const suggestFoods = async (req, res) => {
+    // Set CORS headers explicitly
+    res.header('Access-Control-Allow-Origin', '*');
+    
     try {
         const query = req.query.query;
 
@@ -79,7 +84,7 @@ const suggestFoods = async (req, res) => {
         const response = await fetch(URI);
 
         if (!response.ok) {
-            throw new Error(`USDA API error with status ${response.status}`);
+            throw new Error(`USDA API error with status ${response.status} `);
         }
 
         const data = await response.json();

@@ -9,11 +9,22 @@ app.set("view engine", "pug");
 app.set('views', "frontend/views")
 app.use(express.static("public"));
 
+// Enable CORS for all routes - more permissive for development
 app.use(cors());
+
+// Handle preflight requests
+app.options('*', cors());
+
 app.use(express.urlencoded({ extended : true}));
 app.use(express.json());
 
-app.use('/', router);
+// Add debugging middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url} - Origin: ${req.headers.origin}`);
+    console.log('CORS Headers:', res.getHeaders());
+    next();
+});
 
+app.use('/', router);
 
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
