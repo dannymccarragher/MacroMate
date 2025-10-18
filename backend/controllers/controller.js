@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
-dotenv.config({path: '../backend/.env'});
+dotenv.config({ path: '../backend/.env' });
 
 const API_KEY = process.env.API_KEY;
 
 const fetchData = async (req, res) => {
     // Set CORS headers explicitly
     res.header('Access-Control-Allow-Origin', '*');
-    
+
     try {
         const foodName = req.query.food;
         if (!foodName) {
@@ -36,14 +36,14 @@ const fetchData = async (req, res) => {
         const nutrients = {};
 
         const servingSize = foodItem.servingSize;
-        
+
         // Extract serving size options from foodMeasures
         const servingSizeOptions = foodItem.foodMeasures ? foodItem.foodMeasures.map(measure => ({
             label: measure.householdServingFullText || measure.disseminationText,
             value: measure.gramWeight,
             unit: measure.measureUnitAbbreviation || 'g'
         })) : [];
-        
+
         // Extract nutrients data and scale based on weight
         foodItem.foodNutrients.forEach(nutrient => {
             let nutrientValue = nutrient.value;
@@ -63,13 +63,13 @@ const fetchData = async (req, res) => {
             }
         });
 
-            res.json({
-                food: foodItem.description,
-                weight: weight,
-                nutrients: nutrients,
-                servingSize,
-                servingSizeOptions
-            });
+        res.json({
+            food: foodItem.description,
+            weight: weight,
+            nutrients: nutrients,
+            servingSize,
+            servingSizeOptions
+        });
 
     } catch (error) {
         console.error("Error: ", error);
@@ -80,7 +80,7 @@ const fetchData = async (req, res) => {
 const suggestFoods = async (req, res) => {
     // Set CORS headers explicitly
     res.header('Access-Control-Allow-Origin', '*');
-    
+
     try {
         const query = req.query.query;
 
@@ -88,7 +88,7 @@ const suggestFoods = async (req, res) => {
             return res.status(400).json({ error: "Query must be at least 2 characters long" });
         }
 
-        const URI = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(query)}&api_key=${API_KEY}&pageSize=10`;
+        const URI = `https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(query)}&api_key=${API_KEY}`;
 
         const response = await fetch(URI);
 
