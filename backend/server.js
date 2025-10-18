@@ -18,12 +18,6 @@ app.options('*', cors());
 app.use(express.urlencoded({ extended : true}));
 app.use(express.json());
 
-// Add debugging middleware
-app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url} - Origin: ${req.headers.origin}`);
-    console.log('CORS Headers:', res.getHeaders());
-    next();
-});
 
 app.use('/', router);
 
